@@ -26,6 +26,10 @@ public class Cruce {
 
     }
 
+    public int[][] getHijos() {
+        return hijos;
+    }
+
     public void probabilidadCruce() {
         for (int i = 0; i < m / 2; i++) {
             cruce[i][0] = ((float) Math.random() * 10 + 1) / 10;
@@ -44,7 +48,7 @@ public class Cruce {
     public void imprimir() {
         for (int i = 0; i < m / 2; i++) {
 
-            System.out.println("{" + i + "}" + cruce[i][0] + "-" + cruce[i][1]);
+//            System.out.println("{" + i + "}" + cruce[i][0] + "-" + cruce[i][1]);
 
         }
     }
@@ -57,7 +61,7 @@ public class Cruce {
         int bandera = 0;
         for (int nroHijo = 0; nroHijo < m; nroHijo = nroHijo + 2) {
             if (cruce[nroPareja][0] < prob_cruce) {
-//                System.out.print("prob1: "+cruce[nroPareja][0]+ "  prob cruce"+ prob_cruce);
+//                System.out.print("prob1: " + cruce[nroPareja][0] + "  prob cruce" + prob_cruce);
                 for (int j = 0; j < n; j++) {
                     hijos[nroHijo][j] = padreA[nroPareja][j];
                     hijos[nroHijo + 1][j] = padreB[nroPareja][j];
@@ -83,7 +87,7 @@ public class Cruce {
                 crucetotal(nroHijo, nroPareja, padreA, 1, cruce);
 //                System.out.print("´padre b\n");
                 crucetotal((nroHijo + 1), nroPareja, padreB, 2, cruce);
-                
+
             }
             nroPareja++;
         }
@@ -93,7 +97,7 @@ public class Cruce {
     public void posiciones(int c) {
         int k;
         int[] numeros = new int[n];
-//        System.out.print("as"+cruce[c][1]+"\n");
+//        System.out.print("as" + cruce[c][1] + "\n");
         Random rnd = new Random();
         int res;
         int[] ordenado = new int[(int) cruce[c][1]];
@@ -151,99 +155,95 @@ public class Cruce {
         int pos = 0;
         for (int j = 0; j < n; j++) {//RECORRER TODA LA GIRA
 //            if (j < tabla[0][0] || j > tabla[(int) cruce[nroPareja][1]][0]) { // SI POSICCION NO FUE SELECCIONADA EN LA MATRIZ
-                if (buscar(j, cr, nroPareja, 0) == -1) {
-                    
-                
-//                System.out.print("Posicion "+j+" no fue seleccionada \n");
+            if (buscar(j, cr, nroPareja, 0) == -1) {
+
+//                System.out.print("Posicion " + j + " no fue seleccionada \n");
                 if (buscar(padre[nroPareja][j], cr, nroPareja, a) == -1) {
                     hijos[nroHijo][j] = padre[nroPareja][j];
-//                    System.out.print("Valor no encontrado: "+padre[nroPareja][j]+"\n");
+//                    System.out.print("Valor no encontrado: " + padre[nroPareja][j] + "\n");
                 } else {
-                    
+
                     pos = buscar(padre[nroPareja][j], cr, nroPareja, a);
-//                    System.out.print("Valor encontrado: "+padre[nroPareja][j]+"\n");
+//                    System.out.print("Valor encontrado: " + padre[nroPareja][j] + "\n");
                     if (tabla[pos][3] + tabla[pos][4] == 0) {
-//                        System.out.print("1. Correspondencia = 0 \n");
+//                        System.out.print("1. Correspondencia = 0, intercambiar valores \n");
                         hijos[nroHijo][j] = tabla[pos][c];
                         tabla[pos][3] = 1;
                         tabla[pos][4] = 1;
 
                         if (buscar(tabla[pos][c], cr, nroPareja, a) != -1) {
-//                            System.out.print("Marcado, de encontro valor \n");
-                            tabla[buscar(tabla[pos][c], cr, nroPareja, a)][4] = 1;
+//                            System.out.print("Marcado, se encontro valor \n");//error d=4
+                            tabla[buscar(tabla[pos][c], cr, nroPareja, a)][d] = 1;
                         }
-         
-                    }else{
+
+                    } else {
                         if (tabla[pos][3] + tabla[pos][4] == 2) {
-//                     System.out.print("1.  Correspondencia = 2 \n");
-                    hijos[nroHijo][j] = tabla[pos][c];
-                }else{
-                if (tabla[pos][3] + tabla[pos][4] == 1) {
-//                    System.out.print("1.  Correspondencia = 1 \n");
-                    if (buscar(tabla[pos][a], cr, nroPareja, a) != -1) {
-                        hijos[nroHijo][j] = tabla[pos][a];
-                        tabla[pos][3] = 1;
-                        tabla[pos][4] = 1;
-                        if (buscar(tabla[buscar(tabla[pos][a], cr, nroPareja, c)][a], cr, nroPareja, a) != -1){
-                            tabla[buscar(tabla[buscar(tabla[pos][a], cr, nroPareja, c)][a], cr, nroPareja, a)][d]=1;
-                    }else{
-                            hijos[nroHijo][j] = padre[nroPareja][j];
+//                            System.out.print("1.  Correspondencia = 2 \n");
+                            hijos[nroHijo][j] = tabla[pos][c];
+                        } else {
+                            if (tabla[pos][3] + tabla[pos][4] == 1) {
+//                                System.out.print("1.  Correspondencia = 1 \n");
+
+                                hijos[nroHijo][j] = padre[nroPareja][j];
+
+                            }
                         }
-                }
-                    
-//                    if (tabla[pos][3] + tabla[pos][4] == 1) {
-//                        System.out.print("1. Correspondencia = 1, hijo igual al padre \n");
-//                        hijos[nroHijo][j] = padre[nroPareja][j];
-//                    }else{
-//                        if (tabla[pos][3] + tabla[pos][4] == 2) {
-//                        System.out.print("1. Correspondencia = 2, inter cambiar\n");
-//                        hijos[nroHijo][j] = tabla[pos][c];
-                    }
-                    }
                     }
                 }
             } else {  //SI FUE SELECCIONADO EN MATRIZ
-//                System.out.print("Posicion "+j+" seleccionada \n");
+//                System.out.print("Posicion " + j + " seleccionada \n");
+                //Dónde se encuentra en el arreglo 1(padre1), 2(padre2)
                 pos = buscar(padre[nroPareja][j], cr, nroPareja, c);
-                
-                if (tabla[pos][3] + tabla[pos][4] == 0) {
+                if (tabla[pos][3] + tabla[pos][4] == 0) {//correspondencia 0
 //                    System.out.print("2.  Correspondencia = 0 \n");
-                    hijos[nroHijo][j] = tabla[pos][a];
-                    tabla[pos][3] = 1;
-                    tabla[pos][4] = 1;
-
+                    hijos[nroHijo][j] = tabla[pos][a];//intercambiar valor
+                    tabla[pos][3] = 1;//marcar corresponencia
+                    tabla[pos][4] = 1;//marcar correspondencia
+                    //buscar el valor actual en el arreglo opuesto si se encuentra marcar correspondencia
                     if (buscar(tabla[pos][c], cr, nroPareja, a) != -1) {
-                        tabla[buscar(tabla[pos][c], cr, nroPareja, a)][d] = 1;
-                    }
-                    if (buscar(tabla[pos][a], cr, nroPareja, c) != -1) {
-                        tabla[buscar(tabla[pos][a], cr, nroPareja, c)][e] = 1;
-                    }
-
-//                                
-                }else{
-                if (tabla[pos][3] + tabla[pos][4] == 2) {
-//                     System.out.print("2.  Correspondencia = 2 \n");
-                    hijos[nroHijo][j] = tabla[pos][a];
-                }else{
-                if (tabla[pos][3] + tabla[pos][4] == 1) {
-//                    System.out.print("2.  Correspondencia = 1 \n");
-                    if (buscar(tabla[pos][c], cr, nroPareja, a) != -1) {
-                        hijos[nroHijo][j] = tabla[pos][c];
-                        tabla[pos][3] = 1;
-                        tabla[pos][4] = 1;
-                        if (buscar(tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c], cr, nroPareja, a) != -1){
-                            tabla[buscar(tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c], cr, nroPareja, a)][d]=1;
-                    }else{
-                            hijos[nroHijo][j] = padre[nroPareja][j];
+                        if (tabla[buscar(tabla[pos][c], cr, nroPareja, a)][e] != 1) {
+                            tabla[buscar(tabla[pos][c], cr, nroPareja, a)][d] = 1;
                         }
+                    }//buscar valor opuesto en actual si se encuentra marcar correspondencia
+                    if (buscar(tabla[pos][a], cr, nroPareja, c) != -1) {
+                        if (tabla[buscar(tabla[pos][a], cr, nroPareja, c)][d] != 1) {
+                            tabla[buscar(tabla[pos][a], cr, nroPareja, c)][e] = 1;
+                        }
+                    }
+                } else {//Correspondencia no es cero
+                    if (tabla[pos][3] + tabla[pos][4] == 2) {//Correspondencia 2
+//                        System.out.print("2.  Correspondencia = 2 \n");
+                        hijos[nroHijo][j] = tabla[pos][a];//intercambiar valor
+                    } else {
+                        if (tabla[pos][3] + tabla[pos][4] == 1) {//Correspondencia 1
+//                            System.out.print("2.  Correspondencia = 1 \n");
+                            if (buscar(tabla[pos][c], cr, nroPareja, a) != -1) {
+                                int pos2 = buscar(tabla[pos][c], cr, nroPareja, a);
+//                                System.out.print("2.  se encuentra en arreglo apuesto \n");
+                                if (tabla[pos2][3] + tabla[pos2][4] == 2) {
+                                    hijos[nroHijo][j] = tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c];
+                                } else {
+                                    hijos[nroHijo][j] = tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c];
+                                    tabla[buscar(tabla[pos][c], cr, nroPareja, a)][3] = 1;
+                                    tabla[buscar(tabla[pos][c], cr, nroPareja, a)][4] = 1;
+                                    if (buscar(tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c], cr, nroPareja, a) != -1) {
+                                        tabla[buscar(tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c], cr, nroPareja, a)][d] = 1;
+                                    } else {
+                                        hijos[nroHijo][j] = tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c];
+                                    }
+                                }
+
+                            } else {//agregado
+                                hijos[nroHijo][j] = padre[nroPareja][j];
+                            }
+                        }
+                    }
                 }
-            }}}
+            }
         }
     }
-}
 
-
-public void imprimirhijos() {
+    public void imprimirhijos() {
         System.out.println("Hijos cruzados:");
         for (int j = 0; j < m; j++) {
             System.out.print("{" + (j + 1) + "}: \t");
