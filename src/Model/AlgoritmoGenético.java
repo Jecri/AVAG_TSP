@@ -5,7 +5,7 @@ import java.util.Random;
 public class AlgoritmoGenético {
 
     private static int n = 5; //número de ciudades
-    private static int m = 10; //número de individuos
+    private static int m = 100; //número de individuos debe ser par
     private static int c = 2; //número de competidores de torneo
     private static double mapa[][] = new double[n][n];
     private static int poblacion_inicial[][] = new int[m][n];
@@ -22,7 +22,7 @@ public class AlgoritmoGenético {
     }
 
     public void prueba_LlenarMapa() {
-        double mapa_prueba[][] = {{0, 2, 1, 3, 2}, {2, 0, 2, 3, 4}, {1, 2, 0, -1, 5}, {3, 3, -1, 0, -1}, {2, 4, 5, -1, 0}};
+        double mapa_prueba[][] = {{0, 2, 1, 3, 2}, {2, 0, 2, 3, 4}, {1, 2, 0, 4, 5}, {3, 3, 3, 0, 1}, {2, 4, 5, 2, 0}};
         for (int i = 0; i < n; i++) {
             System.arraycopy(mapa_prueba[i], 0, mapa[i], 0, n);
         }
@@ -32,6 +32,11 @@ public class AlgoritmoGenético {
 //            System.arraycopy(hijo[i], 0, poblacion_hijos[i], 0, n);
 //        }
 //    }
+
+    public static void setPoblacion_inicial(int[][] poblacion_inicial) {
+        AlgoritmoGenético.poblacion_inicial = poblacion_inicial;
+    }
+
     public String prueba_imprime() {
         prueba_LlenarMapa();
         String cadena = "Matriz de prueba generada \n";
@@ -69,7 +74,7 @@ public class AlgoritmoGenético {
     }
 
     public void imprimir_poblacion() {
-        System.out.println("Población de prueba generada:");
+//        System.out.println("Población de prueba generada:");
         for (int j = 0; j < m; j++) {
             System.out.print("{" + (j + 1) + "}: \t");
             for (int i = 0; i < n; i++) {
@@ -80,28 +85,35 @@ public class AlgoritmoGenético {
     }
 
     public void prueba_valor_poblacion() {
-        int invalido=0;
+        int invalido = 0;
         int j = 0;
+        for (int i = 0; i < m; i++) {
+            suma[i]=0;
+        }
         for (int i = 0; i < m; i++) {
             for (j = 0; j < n - 1; j++) {
                 if (mapa[poblacion_inicial[i][j] - 1][poblacion_inicial[i][j + 1] - 1] == -1) {
-                    invalido=1;
-                } 
+                    invalido = 1;
+                }
                 suma[i] += mapa[poblacion_inicial[i][j] - 1][poblacion_inicial[i][j + 1] - 1];
             }
             if (mapa[poblacion_inicial[i][j] - 1][poblacion_inicial[i][0] - 1] == -1) {
                 invalido = 1;
             }
-            if (invalido==1) {
-                valido[i]=0;
-                invalido=0;
-            }
-            else{
-                valido[i]=1;
+            if (invalido == 1) {
+                valido[i] = 0;
+                invalido = 0;
+            } else {
+                valido[i] = 1;
             }
             suma[i] += mapa[poblacion_inicial[i][j] - 1][poblacion_inicial[i][0] - 1];
 //            System.out.println("{"+i+"}: "+suma+"\t ciudad valida: "+valido);
         }
+        int prom=0;
+        for (int i = 0; i < m; i++) {
+            prom+=suma[i];
+        }
+        System.out.print("\n Promedio de poblacion: "+(prom/m)+"\n");
     }
 
     public int prueba_torneo() {
@@ -142,28 +154,32 @@ public class AlgoritmoGenético {
     }
 
     public void prueba_llenarParejas() {
-        System.out.print("Parejas seleccionadas: \n");
-        String cadPaA = "";
-        String cadPaB = "";
+//        System.out.print("Parejas seleccionadas: \n");
+//        String cadPaA = "";
+//        String cadPaB = "";
         int bandera = 0;
         int bandera1 = 0;
         int p = 0;
         for (int i = 0; i < m / 2; i++) {
             p = 0;
             while (p == 0) {
-                bandera = prueba_torneo();
-                bandera1 = prueba_torneo();
+
+                do {
+                    bandera = prueba_torneo();
+                    bandera1 = prueba_torneo();
+                } while (valido[bandera] == 0 && valido[bandera] == 0);
+
                 if (bandera != bandera1) {
-                    cadPaA = "";
-                    cadPaB = "";
+//                    cadPaA = "";
+//                    cadPaB = "";
                     for (int j = 0; j < n; j++) {
 
                         padreA[i][j] = poblacion_inicial[bandera][j];
                         padreB[i][j] = poblacion_inicial[bandera1][j];
-                        cadPaA += padreA[i][j] + "\t";
-                        cadPaB += padreB[i][j] + "\t";
+//                        cadPaA += padreA[i][j] + "\t";
+//                        cadPaB += padreB[i][j] + "\t";
                     }
-                    System.out.print("Pareja {" + i + "}: \t" + "\n" + "Individuo: " + (bandera + 1) + ", \t" + cadPaA + "\n" + "Individuo: " + (bandera1 + 1) + ", \t" + cadPaB + "\n");
+//                    System.out.print("Pareja {" + i + "}: \t" + "\n" + "Individuo: " + (bandera + 1) + ", \t" + cadPaA + "\n" + "Individuo: " + (bandera1 + 1) + ", \t" + cadPaB + "\n");
                     p = 1;
                 } else {
                     p = 0;
@@ -172,17 +188,31 @@ public class AlgoritmoGenético {
         }
     }
 
+    public void poblacion_hijo(int[][] hijos) {
+        AlgoritmoGenético.poblacion_hijos = hijos;
+        setPoblacion_inicial(poblacion_hijos);
+        prueba_valor_poblacion();
+        System.out.println("Hijos: \n");
+        imprimir_poblacion();
+    }
+    
+
     public static void main(String[] args) {
 
         AlgoritmoGenético ag = new AlgoritmoGenético();
         System.out.print(ag.prueba_imprime());
         ag.prueba_poblacionIncial();
+        System.out.print("Poblacion inicial: \n");
         ag.imprimir_poblacion();
-        ag.prueba_llenarParejas();
+        for (int i = 0; i < 5; i++) {
+            ag.prueba_llenarParejas();
         cr = new Cruce(m, 0.55, n);
         cr.cruzamiento(padreA, padreB);
-        mu=new Mutacion(m, n, 0.55, cr.getHijos());
+        mu = new Mutacion(m, n, 0.55, cr.getHijos());
         mu.mutacion();
+        ag.poblacion_hijo(mu.getHijos());
+        }
+        
     }
 
 }

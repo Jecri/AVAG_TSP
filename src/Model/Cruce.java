@@ -4,21 +4,22 @@ import java.util.*;
 
 public class Cruce {
 
-    private final double cruce[][] = new double[1000][1000];
+    
     private final int tabla[][] = new int[1000][1000];
-    private int m = 10;// cantidad de poblacion
-    private int n = 6;// cantidad de ciudades
-    private double prob_cruce = 0.55;
+    private int m = 1000;// cantidad de poblacion
+    private int n = 1000;// cantidad de ciudades
+    private double prob_cruce = 0;
     private double reducc = 0.8;
     private int hijos[][] = new int[m][n];
-    private int noCruzados = 0;
-    private int posNoCruzadas[] = new int[noCruzados];
+//    private int noCruzados = 0;
+//    private int posNoCruzadas[] = new int[noCruzados];
+    private double cruce[][] = new double[m/2][2];
 
     public Cruce(int m, double prob_cruce, int n) {
         this.m = m;
         this.n = n;
         this.prob_cruce = prob_cruce;
-        Cruce c = new Cruce();
+//        Cruce c = new Cruce();
 
     }
 
@@ -31,14 +32,18 @@ public class Cruce {
     }
 
     public void probabilidadCruce() {
-        for (int i = 0; i < m / 2; i++) {
-            cruce[i][0] = ((float) Math.random() * 10 + 1) / 10;
+        double x=0;
+        for (int i = 0; i < m/2; i++) {
+//            System.out.print("I: "+i);
+            x= (double)(Math.random() * 10 + 1) / 10;
+//            System.out.print("X: "+x);
+            cruce[i][0] = x;
             if (cruce[i][0] >= prob_cruce) {
-//                System.out.print("prob1: "+cruce[nroHijo][0]+ "  prob cruce"+ prob_cruce);
-                cruce[i][1] = (int) (Math.random() * reducc * n - 3) + 3;
+//                System.out.print("P: "+prob_cruce);
+                 cruce[i][1] = (int) (Math.random() * reducc * n - 3) + 3;
             } else {
                 cruce[i][1] = 0;
-                noCruzados++;
+//                noCruzados++;
             }
 
         }
@@ -48,21 +53,24 @@ public class Cruce {
     public void imprimir() {
         for (int i = 0; i < m / 2; i++) {
 
-//            System.out.println("{" + i + "}" + cruce[i][0] + "-" + cruce[i][1]);
+            System.out.println("{" + i + "}" + cruce[i][0] + "-" + cruce[i][1]);
 
         }
     }
 
     public void cruzamiento(int padreA[][], int padreB[][]) {
-
+//            System.out.print("M: "+m+" y N: "+n);
         probabilidadCruce();
-        imprimir();
+//        imprimir();
         int nroPareja = 0;
         int bandera = 0;
         for (int nroHijo = 0; nroHijo < m; nroHijo = nroHijo + 2) {
+             
             if (cruce[nroPareja][0] < prob_cruce) {
 //                System.out.print("prob1: " + cruce[nroPareja][0] + "  prob cruce" + prob_cruce);
                 for (int j = 0; j < n; j++) {
+//             
+//                    System.out.print(nroHijo+","+nroPareja+","+j);
                     hijos[nroHijo][j] = padreA[nroPareja][j];
                     hijos[nroHijo + 1][j] = padreB[nroPareja][j];
                 }
@@ -84,14 +92,16 @@ public class Cruce {
                     }
 //                    System.out.print("\n");
                 }
+//                System.out.print("pareja: "+nroPareja);
                 crucetotal(nroHijo, nroPareja, padreA, 1, cruce);
 //                System.out.print("´padre b\n");
                 crucetotal((nroHijo + 1), nroPareja, padreB, 2, cruce);
 
             }
+            
             nroPareja++;
         }
-        imprimirhijos();
+//        imprimirhijos();
     }
 
     public void posiciones(int c) {
@@ -159,6 +169,7 @@ public class Cruce {
 
 //                System.out.print("Posicion " + j + " no fue seleccionada \n");
                 if (buscar(padre[nroPareja][j], cr, nroPareja, a) == -1) {
+//                    System.out.print(nroHijo+","+nroPareja+","+j);
                     hijos[nroHijo][j] = padre[nroPareja][j];
 //                    System.out.print("Valor no encontrado: " + padre[nroPareja][j] + "\n");
                 } else {

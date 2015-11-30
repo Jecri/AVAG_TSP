@@ -6,12 +6,16 @@ package Model;
  */
 public class Mutacion {
 
-    private int m = 10;// cantidad de poblacion
-    private int n = 6;// cantidad de ciudades
+    private int m = 1000;// cantidad de poblacion
+    private int n = 1000;// cantidad de ciudades
     private int hijos[][] = new int[m][n];
     private double prob[][]= new double[m][3];
     public double probM=0.5;
     public Mutacion() {
+    }
+
+    public int[][] getHijos() {
+        return hijos;
     }
 
     public Mutacion(int m, int n, double probM,int hijos[][]) {
@@ -23,7 +27,7 @@ public class Mutacion {
     public void mutacion(){
         probabilidadMutacion();
         mutar();
-        imprimir();
+//        imprimir();
     }
     public static void main(String[] args) {
         Mutacion m= new Mutacion();
@@ -31,21 +35,22 @@ public class Mutacion {
     }
     public void probabilidadMutacion() {
         int x=-1;
+//        System.out.print("M: "+m+" y N: "+n);
         for (int i = 0; i < m ; i++) {
-            prob[i][0] = ((float) Math.random() * 10 + 1) / 10;
-            System.out.print("hijo: "+i+", \t prob.:"+prob[i][0]+"\t");
+            prob[i][0] = ((double) Math.random() * 10 + 1) / 10;
+//            System.out.print("hijo: "+i+", \t prob.:"+prob[i][0]+"\t");
             if (prob[i][0] >= probM) {
                 prob[i][1] = (int) (Math.random() * (n - 1));
-                System.out.print(prob[i][1]+"\t");
+//                System.out.print(prob[i][1]+"\t");
                 do{
                     prob[i][2] = (int) (Math.random() * (n - 1));
                 }while(prob[i][2]==prob[i][1]);
-                System.out.print(prob[i][2]+"\n");
+//                System.out.print(prob[i][2]+"\n");
             } else {
-                prob[i][1] = 0;
+                prob[i][1]=0;
                 prob[i][2]=0;
-                System.out.print(prob[i][1]+"\t");
-                System.out.print(prob[i][2]+"\n");
+//                System.out.print(prob[i][1]+"\t");
+//                System.out.print(prob[i][2]+"\n");
             }
 
         }
