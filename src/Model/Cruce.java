@@ -5,11 +5,11 @@ import java.util.*;
 public class Cruce {
 
     
-    private final int tabla[][] = new int[1000][1000];
+    private final int tabla[][] = new int[50][5];
     private int m = 1000;// cantidad de poblacion
-    private int n = 1000;// cantidad de ciudades
+    private int n = 50;// cantidad de ciudades
     private double prob_cruce = 0;
-    private double reducc = 0.8;
+    private double reducc = 0.5;
     private int hijos[][] = new int[m][n];
 //    private int noCruzados = 0;
 //    private int posNoCruzadas[] = new int[noCruzados];
@@ -19,6 +19,7 @@ public class Cruce {
         this.m = m;
         this.n = n;
         this.prob_cruce = prob_cruce;
+//        System.out.print("M: "+m+" y N: "+n);
 //        Cruce c = new Cruce();
 
     }
@@ -40,7 +41,7 @@ public class Cruce {
             cruce[i][0] = x;
             if (cruce[i][0] >= prob_cruce) {
 //                System.out.print("P: "+prob_cruce);
-                 cruce[i][1] = (int) (Math.random() * reducc * n - 3) + 3;
+                 cruce[i][1] = (int) (Math.random() * ((reducc * n) - (0.3* n))) + (0.3* n);
             } else {
                 cruce[i][1] = 0;
 //                noCruzados++;
@@ -59,7 +60,7 @@ public class Cruce {
     }
 
     public void cruzamiento(int padreA[][], int padreB[][]) {
-//            System.out.print("M: "+m+" y N: "+n);
+            //System.out.print("M: "+m+" y N: "+n);
         probabilidadCruce();
 //        imprimir();
         int nroPareja = 0;
@@ -184,8 +185,22 @@ public class Cruce {
 
                         if (buscar(tabla[pos][c], cr, nroPareja, a) != -1) {
 //                            System.out.print("Marcado, se encontro valor \n");//error d=4
+                            if (tabla[buscar(tabla[pos][c], cr, nroPareja, a)][e] != 1) {
                             tabla[buscar(tabla[pos][c], cr, nroPareja, a)][d] = 1;
                         }
+                        }
+                        //buscar valor opuesto en actual si se encuentra marcar correspondencia
+                    if (buscar(tabla[pos][a], cr, nroPareja, c) != -1) {
+                        if (tabla[buscar(tabla[pos][a], cr, nroPareja, c)][d] != 1) {
+                            tabla[buscar(tabla[pos][a], cr, nroPareja, c)][e] = 1;
+                        }
+                    }
+                        
+                        
+                        
+                        
+                        
+                        
 
                     } else {
                         if (tabla[pos][3] + tabla[pos][4] == 2) {
@@ -232,16 +247,23 @@ public class Cruce {
                                 int pos2 = buscar(tabla[pos][c], cr, nroPareja, a);
 //                                System.out.print("2.  se encuentra en arreglo apuesto \n");
                                 if (tabla[pos2][3] + tabla[pos2][4] == 2) {
-                                    hijos[nroHijo][j] = tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c];
+                                    hijos[nroHijo][j] = tabla[pos2][c];
                                 } else {
-                                    hijos[nroHijo][j] = tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c];
-                                    tabla[buscar(tabla[pos][c], cr, nroPareja, a)][3] = 1;
-                                    tabla[buscar(tabla[pos][c], cr, nroPareja, a)][4] = 1;
-                                    if (buscar(tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c], cr, nroPareja, a) != -1) {
-                                        tabla[buscar(tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c], cr, nroPareja, a)][d] = 1;
+                                    if (tabla[pos2][3] + tabla[pos2][4] == 0) {
+                                        hijos[nroHijo][j] = tabla[pos2][c];
+                                    tabla[pos2][3] = 1;
+                                    tabla[pos2][4] = 1;
+                                    if (buscar(tabla[pos2][c], cr, nroPareja, a) != -1) {
+                                        tabla[buscar(tabla[pos2][c], cr, nroPareja, a)][d] = 1;
                                     } else {
-                                        hijos[nroHijo][j] = tabla[buscar(tabla[pos][c], cr, nroPareja, a)][c];
+                                        hijos[nroHijo][j] = tabla[pos2][c];
                                     }
+                                    }else{
+                                        if (tabla[pos2][3] + tabla[pos2][4] == 1) {
+                                            hijos[nroHijo][j] = padre[nroPareja][j];
+                                        }
+                                    }
+                                    
                                 }
 
                             } else {//agregado
@@ -265,9 +287,9 @@ public class Cruce {
         }
     }
 
-    public static void main(String[] args) {
-        Cruce c = new Cruce();
-        c.probabilidadCruce();
-        c.imprimir();
-    }
+//    public static void main(String[] args) {
+//        Cruce c = new Cruce();
+//        c.probabilidadCruce();
+//        c.imprimir();
+//    }
 }

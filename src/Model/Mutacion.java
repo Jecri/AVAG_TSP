@@ -7,7 +7,7 @@ package Model;
 public class Mutacion {
 
     private int m = 1000;// cantidad de poblacion
-    private int n = 1000;// cantidad de ciudades
+    private int n = 50;// cantidad de ciudades
     private int hijos[][] = new int[m][n];
     private double prob[][]= new double[m][3];
     public double probM=0.5;
@@ -29,10 +29,10 @@ public class Mutacion {
         mutar();
 //        imprimir();
     }
-    public static void main(String[] args) {
-        Mutacion m= new Mutacion();
-        m.probabilidadMutacion();
-    }
+//    public static void main(String[] args) {
+//        Mutacion m= new Mutacion();
+//        m.probabilidadMutacion();
+//    }
     public void probabilidadMutacion() {
         int x=-1;
 //        System.out.print("M: "+m+" y N: "+n);
